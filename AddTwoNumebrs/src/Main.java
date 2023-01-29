@@ -15,7 +15,7 @@ public class Main {
         l2.add(6);
 
         System.out.println(l2);
-        System.out.println("---------");
+        System.out.println("----------");
         System.out.println(Solution.solution(l1, l2));
     }
 }
