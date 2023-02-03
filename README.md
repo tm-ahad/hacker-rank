@@ -1,2 +1,2 @@
 # hacker-rank
-Problem Solving on leetcode using mostly java.
+Problem Solving on hackerrank.
