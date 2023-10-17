@@ -1,38 +1,88 @@
-package Solution;
+import java.io.*;
+import java.math.*;
+import java.security.*;
+import java.text.*;
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.function.*;
+import java.util.regex.*;
+import java.util.stream.*;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
 
-import java.util.LinkedList;
-import java.util.function.Consumer;
+class Result {
 
-public class Solution {
+    /*
+     * Complete the 'getTotalX' function below.
+     *
+     * The function is expected to return an INTEGER.
+     * The function accepts following parameters:
+     *  1. INTEGER_ARRAY a
+     *  2. INTEGER_ARRAY b
+     */
 
-    public static LinkedList<Integer> solution(LinkedList<Integer> a, LinkedList<Integer> b) {
-        StringBuilder i1 = new StringBuilder();
-        StringBuilder i2 = new StringBuilder();
+    public static int getTotalX(List<Integer> a, List<Integer> b) {
+        Integer max = Collections.max(b);
+        final int[] res = {0};
 
-        a.forEach(new Consumer<Integer>() {
-            @Override
-            public void accept(Integer integer) {
-                i1.append(integer);
-            }
-        });
+        int i = 0;
+        int lim = max/2;
 
-        b.forEach(new Consumer<Integer>() {
-            @Override
-            public void accept(Integer integer) {
-                i2.append(integer);
-            }
-        });
-        LinkedList<Integer> res = new LinkedList<Integer>();
+        while (i < lim) {
+            int finalI = i;
+            boolean[] cond = new boolean[2];
+            a.forEach(new Consumer<Integer>() {
+                @Override
+                public void accept(Integer num) {
+                    if (finalI % num == 0) {
+                        cond[0] = true;
+                    }
+                }
+            });
+            b.forEach(new Consumer<Integer>() {
+                @Override
+                public void accept(Integer num) {
+                    if (num % finalI == 0) {
+                        cond[1] = true;
+                    }
+                    if (cond[1] && cond[0]) {
+                        res[0] += 1;
+                    }
+                }
+            });
 
-        String rawres = String.valueOf(Integer.parseInt(i2.toString()) +
-                Integer.parseInt(i1.toString()));
-
-        for (int i = 0; i < rawres.length(); i++) {
-            String c = String.valueOf(rawres.charAt(i));
-
-            res.add(Integer.parseInt(c));
+            i++;
         }
 
-        return res;
+        return res[0];
+    }
+}
+
+public class Solution {
+    public static void main(String[] args) throws IOException {
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getenv("OUTPUT_PATH")));
+
+        String[] firstMultipleInput = bufferedReader.readLine().replaceAll("\\s+$", "").split(" ");
+
+        int n = Integer.parseInt(firstMultipleInput[0]);
+
+        int m = Integer.parseInt(firstMultipleInput[1]);
+
+        List<Integer> arr = Stream.of(bufferedReader.readLine().replaceAll("\\s+$", "").split(" "))
+                .map(Integer::parseInt)
+                .collect(toList());
+
+        List<Integer> brr = Stream.of(bufferedReader.readLine().replaceAll("\\s+$", "").split(" "))
+                .map(Integer::parseInt)
+                .collect(toList());
+
+        int total = Result.getTotalX(arr, brr);
+
+        bufferedWriter.write(String.valueOf(total));
+        bufferedWriter.newLine();
+
+        bufferedReader.close();
+        bufferedWriter.close();
     }
 }
